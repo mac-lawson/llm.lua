@@ -89,6 +89,21 @@ end
 -- TODO implement layernorm_backward
 function layernorm_backward(dinp, dweight, dbias, dout, inp, weight, mean, rstd, B, T, C)
  for b=0, B - 1 do
-  
+  for t=0, T -1 do
+    local dout_bt = dout + b * T * C + t * C
+    local inp_bt = inp + b * T * C + t * C
+    local dinp_bt = dinp + b * T * C + t * C
+    local mean_bt = mean[b * T + t]
+    local rstd_bt = rstd[b * T + t]
+
+    -- first: two reduce operations
+    local dnorm_mean = 0.0
+    local dnorm_norm_mean = 0.0
+    for c=0, C - 1 do
+       local norm_bti = (inp_bt[c] - mean_bt) * rstd_bt
+        local dnorm_i = weight[c] * dout_bt[c]
+    end
+
+  end
  end
 end
